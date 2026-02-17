@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
 import '../repositories/tasks_repository.dart';
+import '../di.dart';
 
 class TasksScreen extends StatefulWidget {
   final ITasksRepository repository;
@@ -9,6 +10,11 @@ class TasksScreen extends StatefulWidget {
     required this.repository,
     super.key,
   });
+
+  // Фабрика, которая берёт репозиторий из get_it
+  factory TasksScreen.newWithLocator() {
+    return TasksScreen(repository: getIt<ITasksRepository>());
+  }
 
   @override
   State<TasksScreen> createState() => _TasksScreenState();

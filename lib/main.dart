@@ -3,11 +3,14 @@ import 'di.dart';
 import 'repositories/tasks_repository.dart';
 import 'screens/tasks_screen.dart';
 
-void main() {
-  // Шаг 2: Вызываем setupDependencies() в main()
-  setupDependencies();
-  // Для использования FakeTasksRepository раскомментируйте строку ниже:
-   //setupDependencies(useFake: true);
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Асинхронная инициализация зависимостей перед runApp
+  await setupDependencies();
+  // Для использования FakeTasksRepository:
+  // await setupDependencies(useFake: true);
+
   runApp(const MainApp());
 }
 
@@ -16,11 +19,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Получаем репозиторий из DI контейнера
-    final repository = getIt<ITasksRepository>();
-    
+    // Передаём зависимость через фабрику TasksScreen.newWithLocator()
     return MaterialApp(
-      home: TasksScreen(repository: repository),
+      home: TasksScreen.newWithLocator(),
     );
   }
 }
